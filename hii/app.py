@@ -226,4 +226,4 @@ def get_dropdown_options():
 if __name__ == '__main__':
     if not os.path.exists('static'):
         os.makedirs('static')
-    app.run(debug=True,port=5001)
+    app.run(host='0.0.0.0',debug=True,port=5001)
