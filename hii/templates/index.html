@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Interest Rate Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0e0e0, #ffffff);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            background: -webkit-linear-gradient(#ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            position: relative;
+            flex: 1 1 calc(33% - 40px); 
+            box-sizing: border-box;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .card label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .card input, .card select {
+            padding: 12px;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            width: 100%;
+            margin: 0;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .card input:focus, .card select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+
+        .card:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+        .card:nth-child(even) {
+            background: #e9f7f8;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 12px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            align-self: center;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            background-color: #004494;
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #28a745;
+            text-align: center;
+        }
+
+        .error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculate Your Loan Interest Rate</h1>
+    <form id="prediction-form">
+        <div class="card">
+            <label for="Loan_Amount_Requested">Loan Amount Requested 💵</label>
+            <input type="number" id="Loan_Amount_Requested" name="Loan_Amount_Requested" required>
+        </div>
+        <div class="card">
+            <label for="Annual_Income">Annual Income 💰</label>
+            <input type="number" id="Annual_Income" name="Annual_Income" required>
+        </div>
+        <div class="card">
+            <label for="Debt_To_Income">Debt To Income  💳</label>
+            <input type="number" step="0.01" id="Debt_To_Income" name="Debt_To_Income" required>
+        </div>
+        <div class="card">
+            <label for="Inquiries_Last_6Mo">Inquiries Last 6 Months 📊</label>
+            <input type="number" id="Inquiries_Last_6Mo" name="Inquiries_Last_6Mo" required>
+        </div>
+        <div class="card">
+            <label for="Number_Open_Accounts">Number of Open Accounts 📂</label>
+            <input type="number" id="Number_Open_Accounts" name="Number_Open_Accounts" required>
+        </div>
+        <div class="card">
+            <label for="Total_Accounts">Total Accounts 📁</label>
+            <input type="number" id="Total_Accounts" name="Total_Accounts" required>
+        </div>
+        <div class="card">
+            <label for="loan_income_ratio">Loan to Income Ratio 📈</label>
+            <input type="number" step="0.01" id="loan_income_ratio" name="loan_income_ratio" required>
+        </div>
+        <div class="card">
+            <label for="total_income_ratio">Total Income Ratio 📉</label>
+            <input type="number" step="0.01" id="total_income_ratio" name="total_income_ratio" required>
+        </div>
+        <div class="card">
+            <label for="debt_income_ratio">Debt to Income Ratio 📉</label>
+            <input type="number" step="0.01" id="debt_income_ratio" name="debt_income_ratio" required>
+        </div>
+        <div class="card">
+            <label for="Length_Employed">Length Employed ⏳</label>
+            <select id="Length_Employed" name="Length_Employed" required></select>
+        </div>
+        <div class="card">
+            <label for="Income_Verified">Income Verified ✔️</label>
+            <select id="Income_Verified" name="Income_Verified" required></select>
+        </div>
+        <div class="card">
+            <label for="Purpose_Of_Loan">Purpose Of Loan 🎯</label>
+            <select id="Purpose_Of_Loan" name="Purpose_Of_Loan" required></select>
+        </div>
+        <button type="button" onclick="handleSubmit()">Calculate Interest Rate</button>
+    </form>
+    <div class="result" id="result"></div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('/dropdown-options')
+            .then(response => response.json())
+            .then(data => {
+                populateDropdown('Length_Employed', data['categorical_options']['Length_Employed']);
+                populateDropdown('Income_Verified', data['categorical_options']['Income_Verified']);
+                populateDropdown('Purpose_Of_Loan', data['categorical_options']['Purpose_Of_Loan']);
+            })
+            .catch(error => console.error('Error fetching dropdown options:', error));
+    });
+
+    function populateDropdown(elementId, options) {
+        const selectElement = document.getElementById(elementId);
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.innerHTML = option;
+            selectElement.appendChild(opt);
+        });
+    }
+
+    function handleSubmit() {
+        const formData = new FormData(document.getElementById("prediction-form"));
+        const jsonObject = {};
+
+        formData.forEach((value, key) => {
+            jsonObject[key] = value;
+        });
+
+        fetch('/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObject)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById('result').innerHTML = `Error: ${data.error}`;
+                document.getElementById('result').classList.add('error');
+            } else {
+                // Redirect to results page with query parameters
+                const queryString = new URLSearchParams({
+                    predicted_interest_rate: data.predicted_interest_rate,
+                    plot_url: data.plot_url
+                }).toString();
+                
+                window.location.href = `/results?${queryString}`;
+            }
+        })
+        .catch(error => console.error('Error during prediction:', error));
+    }
+</script>
+</body>
+</html>
